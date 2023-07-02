@@ -66,11 +66,24 @@ public:
 		y++;
 		return *this;
 	}
+	Point& operator--() 
+	{
+		x--;
+		y--;
+		return *this;
+	}
 	Point operator++(int)
 	{
 		Point old = *this;  // сохраняем исходное значение объекта
 		x++;
 		y++;
+		return old;
+	}
+	Point operator--(int)
+	{
+		Point old = *this;
+		x--;
+		y--;
 		return old;
 	}
 	Point& operator+=(const Point& other)
