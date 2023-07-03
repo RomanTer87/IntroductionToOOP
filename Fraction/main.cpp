@@ -90,6 +90,28 @@ public:
 	{
 		return *this = *this * other;
 	}
+	Fraction& operator--()
+	{
+		integer--;
+		return *this;
+	}
+	Fraction operator--(int)
+	{
+		Fraction old(*this);
+		integer--;
+		return old;
+	}
+	Fraction& operator++()
+	{
+		integer++;
+		return *this;
+	}
+	Fraction operator++(int)
+	{
+		Fraction old(*this);
+		integer++;
+		return old;
+	}
 	
 
 
@@ -103,6 +125,26 @@ public:
 	{
 		integer += numerator / denominator;
 		numerator %= denominator;
+	}
+	Fraction& reduce()
+	{
+		/*int more, less, rest;
+		if (numerator > denominator)more = numerator, less = denominator;
+		else less = numerator, more = denominator;*/
+		to_proper();
+		int less = numerator;
+		int more = denominator;
+		int rest;
+		do
+		{
+			rest = more % less;
+			more = less;
+			less = rest;
+		} while (rest);
+		int GCD = more; // GCD - Greatest Common Divisor (наибольший общий делитель)
+		numerator /= GCD;
+		denominator /= GCD;
+		return *this;
 	}
 	void print()const
 	{
@@ -146,8 +188,44 @@ Fraction operator/(const Fraction& left,const Fraction& right)
 	);*/
 	return left * right.inverted();
 }
-
+bool operator==(Fraction left, Fraction right)
+{
+	left.to_improper();
+	left.to_improper();
+	/*if (left.get_numerator() * right.get_denominator() == right.get_numerator() * left.get_denominator())
+		return true;
+	else
+		return false;*/
+	return left.get_numerator() * right.get_denominator() == right.get_numerator() * left.get_denominator();
+}
+bool operator!=(const Fraction left, const Fraction right)
+{
+	return !(left == right);
+}
+bool operator>(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return left.get_numerator() * right.get_denominator() > right.get_numerator() * left.get_denominator();
+}bool operator<(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return left.get_numerator() * right.get_denominator() < right.get_numerator() * left.get_denominator();
+}
+bool operator>=(const Fraction left, const Fraction right)
+{
+	//return left > right || left == right;
+	return !(left < right);
+}
+bool operator<= (const Fraction left, const Fraction right)
+{
+	//return left > right || left == right;
+	return !(left > right);
+}
 //#define CONSTRUCTORS_CHECK
+//#define ARITHMETICALS_OPERATORS_CHECK
+//#define COMPARISON_OPERATORS_CHECK
 
 void main()
 {
@@ -175,6 +253,7 @@ void main()
 	F.print();
 #endif // CONSTRUCTORS_CHECK
 
+#ifdef ARITHMETICALS_OPERATORS_CHECK
 	Fraction A(2, 3, 4);
 	A.print();
 
@@ -195,5 +274,22 @@ void main()
 
 	/*A *= B;
 	A.print();*/
+
+	--A;
+	++B;
+	A.print();
+	B.print();
+#endif // ARITHMETICALS_OPERATORS_CHECK
+
+#ifdef COMPARISON_OPERATORS_CHECK
+	Fraction A(1, 2);
+	Fraction B(5, 10);
+	cout << (A <= B) << endl;
+#endif // COMPARISON_OPERATORS_CHECK
+
+	Fraction A(840, 3600);
+	A.print();
+	A.reduce();
+	A.print();
 
 }
