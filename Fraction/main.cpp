@@ -2,6 +2,8 @@
 #include<iostream>
 using namespace std;
 
+#define delimiter "\n------------------------------------------------\n"
+
 class Fraction;
 Fraction operator*(Fraction left, Fraction right);
 
@@ -44,12 +46,22 @@ public:
 		this->denominator = 1;
 		cout << "DefaultConstructor:" << this << endl;
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
 		this->denominator = 1;
 		cout << "1ArgConstructor:" << this << endl;
+	}
+	Fraction(double decimal)
+	{
+		decimal += 1e-10;
+		integer = decimal;
+		decimal -= integer;
+		denominator = 1e+9; // точность всегда будет 9 знаков после запятой
+		numerator = decimal * denominator;
+		reduce();
+		cout << "1ArgConstructor:\t" << this << endl;
 	}
 	Fraction(int numerator, int denominator)
 	{
@@ -113,7 +125,15 @@ public:
 		integer++;
 		return old;
 	}
-
+	//		Type-cast operators
+	explicit operator int()const
+	{
+		return integer;
+	}
+	explicit operator double()const
+	{
+		return integer+(double)numerator / denominator;
+	}
 
 	//		Methods
 	void to_improper()
@@ -199,7 +219,7 @@ Fraction operator*(Fraction left, Fraction right)
 		left.get_denominator() * right.get_denominator()
 	).reduce();
 }
-Fraction operator/(const Fraction& left,const Fraction& right)
+Fraction operator/(const Fraction& left, const Fraction& right)
 {
 	/*left.to_improper();
 	right.to_improper();
@@ -313,10 +333,13 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 	return is;
 }
 //#define CONSTRUCTORS_CHECK
-#define ARITHMETICALS_OPERATORS_CHECK
+//#define ARITHMETICALS_OPERATORS_CHECK
 //#define COMPARISON_OPERATORS_CHECK
 //#define INPUT_CHECK_1
 //#define INPUT_CHECK_2
+//#define	CONVERSION_FROM_OTHER_TO_CLASS
+//#define CONVERSION_FROM_CLASS_TO_OTHER
+
 
 void main()
 {
@@ -348,7 +371,7 @@ void main()
 	Fraction A(4, 5);
 	A.print();
 
-	Fraction B(3,4);
+	Fraction B(3, 4);
 	B.print();
 
 	Fraction C = A + B;
@@ -398,6 +421,34 @@ void main()
 	cout << A << "\t" << B << "\t" << C << endl;
 #endif // 
 
+#ifdef CONVERSION_FROM_OTHER_TO_CLASS
+	Fraction A = Fraction(5);
+	cout << A << endl;
+	cout << delimiter << endl;
+	Fraction B; // Default constructor
+	cout << delimiter << endl;
+	B = Fraction(8);
+	cout << delimiter << endl;
+	cout << B << endl;
 
+	//Fraction C = 12; // explicit constrctor невозможно вызвать операцией присваивания
+	//Fraction C(12); // explicit constrctor можно вызвать только так
+	Fraction C{ 12 }; // или так
+	cout << C << endl;
+#endif // CONVERSION_FROM_OTHER_TO_CLASS
 
+#ifdef CONVERSION_FROM_CLASS_TO_OTHER
+	Fraction A(2, 1, 2);
+	cout << A << endl;
+	int a = (int)A;
+	cout << a << endl;
+
+	Fraction B(2, 3, 4);
+	cout << B << endl;
+	double b = double(B);
+	cout << b << endl;
+#endif // CONVERSION_FROM_CLASS_TO_OTHER
+
+	Fraction A = 2.76;
+	cout << A << endl;
 }
