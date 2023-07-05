@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS 
 #include<iostream>
 using namespace std;
 
@@ -112,7 +113,6 @@ public:
 		integer++;
 		return old;
 	}
-	
 
 
 	//		Methods
@@ -135,6 +135,7 @@ public:
 		int less = numerator;
 		int more = denominator;
 		int rest;
+		if (less == 0)return *this;
 		do
 		{
 			rest = more % less;
@@ -167,6 +168,27 @@ public:
 	}
 };
 
+Fraction operator+(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return Fraction
+	{
+		(left.get_numerator() * right.get_denominator()) + (right.get_numerator() * left.get_denominator()),
+		left.get_denominator() * right.get_denominator()
+	};
+}
+Fraction operator-(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return Fraction
+	{
+		(left.get_numerator() * right.get_denominator()) - (right.get_numerator() * left.get_denominator()),
+		left.get_denominator() * right.get_denominator()
+	};
+}
+
 Fraction operator*(Fraction left, Fraction right)
 {
 	left.to_improper();
@@ -175,7 +197,7 @@ Fraction operator*(Fraction left, Fraction right)
 	(
 		left.get_numerator() * right.get_numerator(),
 		left.get_denominator() * right.get_denominator()
-	);
+	).reduce();
 }
 Fraction operator/(const Fraction& left,const Fraction& right)
 {
@@ -187,6 +209,21 @@ Fraction operator/(const Fraction& left,const Fraction& right)
 		left.get_denominator() * right.get_numerator()
 	);*/
 	return left * right.inverted();
+}
+Fraction& operator+=(Fraction& left, Fraction& right)
+{
+	left = left + right;
+	return left;
+}
+Fraction& operator-=(Fraction& left, Fraction& right)
+{
+	left = left - right;
+	return left;
+}
+Fraction& operator/=(Fraction& left, Fraction& right)
+{
+	left = left / right;
+	return left;
 }
 bool operator==(Fraction left, Fraction right)
 {
@@ -223,9 +260,63 @@ bool operator<= (const Fraction left, const Fraction right)
 	//return left > right || left == right;
 	return !(left > right);
 }
+std::ostream& operator<<(std::ostream& os, const Fraction& obj)
+{
+	if (obj.get_integer())os << obj.get_integer(); // если есть цела€ часть, выводим еЄ на экран
+	if (obj.get_numerator())
+	{
+		if (obj.get_integer())os << "(";
+		os << obj.get_numerator() << "/" << obj.get_denominator();
+		if (obj.get_integer())os << ")";
+	}
+	else if (obj.get_integer() == 0)os << 0;
+	return os;
+}
+std::istream& operator>>(std::istream& is, Fraction& obj)
+{
+	/*
+	_______________________________________
+	5
+	1/2
+	2 3/4
+	2(3/4)
+	_______________________________________
+	*/
+	/*int integer, numerator, denominator;
+	is >> integer >> numerator >> denominator;
+	obj.set_integer(integer);
+	obj.set_numerator(numerator);
+	obj.set_denominator(denominator);*/
+
+	const int SIZE = 256;
+	char buffer[SIZE] = {};
+	cin >> buffer;
+	//is.getline(buffer, SIZE);
+	int number[3] = {};
+	int n = 0; // счетчик введенных чисел
+	char delimiters[] = "()/";
+	for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
+		number[n++] = std::atoi(pch);
+	//for (int i = 0; i < n; i++)cout << number[i] << "\t"; cout << endl;
+	switch (n)
+	{
+	case 1: obj.set_integer(number[0]); break;
+	case 2:
+		obj.set_numerator(number[0]);
+		obj.set_denominator(number[1]);
+		break;
+	case 3:
+		obj.set_integer(number[0]);
+		obj.set_numerator(number[1]);
+		obj.set_denominator(number[2]);
+	}
+	return is;
+}
 //#define CONSTRUCTORS_CHECK
-//#define ARITHMETICALS_OPERATORS_CHECK
+#define ARITHMETICALS_OPERATORS_CHECK
 //#define COMPARISON_OPERATORS_CHECK
+//#define INPUT_CHECK_1
+//#define INPUT_CHECK_2
 
 void main()
 {
@@ -254,12 +345,17 @@ void main()
 #endif // CONSTRUCTORS_CHECK
 
 #ifdef ARITHMETICALS_OPERATORS_CHECK
-	Fraction A(2, 3, 4);
+	Fraction A(4, 5);
 	A.print();
 
-	Fraction B(3, 4, 5);
+	Fraction B(3,4);
 	B.print();
 
+	Fraction C = A + B;
+	C.print();
+
+	A /= B;
+	A.print();
 	/*A.to_improper();
 	A.print();
 
@@ -275,10 +371,11 @@ void main()
 	/*A *= B;
 	A.print();*/
 
-	--A;
+	/*--A;
 	++B;
 	A.print();
-	B.print();
+	B.print();*/
+
 #endif // ARITHMETICALS_OPERATORS_CHECK
 
 #ifdef COMPARISON_OPERATORS_CHECK
@@ -287,9 +384,20 @@ void main()
 	cout << (A <= B) << endl;
 #endif // COMPARISON_OPERATORS_CHECK
 
+#ifdef INPUT_CHECK_1
 	Fraction A(840, 3600);
-	A.print();
+	cout << "¬ведите простую дробь: "; cin >> A;
+	cout << A << endl;
 	A.reduce();
-	A.print();
+	cout << A << endl;
+#endif // INPUT_CHECK_1
+
+#ifdef INPUT_CHECK_2
+	Fraction A, B, C;
+	cout << "¬ведите три простые дроби: "; cin >> A >> B >> C;
+	cout << A << "\t" << B << "\t" << C << endl;
+#endif // 
+
+
 
 }
