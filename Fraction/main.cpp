@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS 
+п»ї#define _CRT_SECURE_NO_WARNINGS 
 #include<iostream>
 using namespace std;
 
@@ -58,7 +58,7 @@ public:
 		decimal += 1e-10;
 		integer = decimal;
 		decimal -= integer;
-		denominator = 1e+9; // точность всегда будет 9 знаков после запятой
+		denominator = 1e+9; // С‚РѕС‡РЅРѕСЃС‚СЊ РІСЃРµРіРґР° Р±СѓРґРµС‚ 9 Р·РЅР°РєРѕРІ РїРѕСЃР»Рµ Р·Р°РїСЏС‚РѕР№
 		numerator = decimal * denominator;
 		reduce();
 		cout << "1ArgConstructor:\t" << this << endl;
@@ -162,14 +162,14 @@ public:
 			more = less;
 			less = rest;
 		} while (rest);
-		int GCD = more; // GCD - Greatest Common Divisor (наибольший общий делитель)
+		int GCD = more; // GCD - Greatest Common Divisor (РЅР°РёР±РѕР»СЊС€РёР№ РѕР±С‰РёР№ РґРµР»РёС‚РµР»СЊ)
 		numerator /= GCD;
 		denominator /= GCD;
 		return *this;
 	}
 	void print()const
 	{
-		if (integer)cout << integer; // если есть целая часть, выводим её на экран
+		if (integer)cout << integer; // РµСЃР»Рё РµСЃС‚СЊ С†РµР»Р°СЏ С‡Р°СЃС‚СЊ, РІС‹РІРѕРґРёРј РµС‘ РЅР° СЌРєСЂР°РЅ
 		if (numerator)
 		{
 			if (integer)cout << "(";
@@ -282,7 +282,7 @@ bool operator<= (const Fraction left, const Fraction right)
 }
 std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 {
-	if (obj.get_integer())os << obj.get_integer(); // если есть целая часть, выводим её на экран
+	if (obj.get_integer())os << obj.get_integer(); // РµСЃР»Рё РµСЃС‚СЊ С†РµР»Р°СЏ С‡Р°СЃС‚СЊ, РІС‹РІРѕРґРёРј РµС‘ РЅР° СЌРєСЂР°РЅ
 	if (obj.get_numerator())
 	{
 		if (obj.get_integer())os << "(";
@@ -313,7 +313,7 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 	cin >> buffer;
 	//is.getline(buffer, SIZE);
 	int number[3] = {};
-	int n = 0; // счетчик введенных чисел
+	int n = 0; // СЃС‡РµС‚С‡РёРє РІРІРµРґРµРЅРЅС‹С… С‡РёСЃРµР»
 	char delimiters[] = "()/";
 	for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
 		number[n++] = std::atoi(pch);
@@ -409,7 +409,7 @@ void main()
 
 #ifdef INPUT_CHECK_1
 	Fraction A(840, 3600);
-	cout << "Введите простую дробь: "; cin >> A;
+	cout << "Р’РІРµРґРёС‚Рµ РїСЂРѕСЃС‚СѓСЋ РґСЂРѕР±СЊ: "; cin >> A;
 	cout << A << endl;
 	A.reduce();
 	cout << A << endl;
@@ -417,7 +417,7 @@ void main()
 
 #ifdef INPUT_CHECK_2
 	Fraction A, B, C;
-	cout << "Введите три простые дроби: "; cin >> A >> B >> C;
+	cout << "Р’РІРµРґРёС‚Рµ С‚СЂРё РїСЂРѕСЃС‚С‹Рµ РґСЂРѕР±Рё: "; cin >> A >> B >> C;
 	cout << A << "\t" << B << "\t" << C << endl;
 #endif // 
 
@@ -431,9 +431,9 @@ void main()
 	cout << delimiter << endl;
 	cout << B << endl;
 
-	//Fraction C = 12; // explicit constrctor невозможно вызвать операцией присваивания
-	//Fraction C(12); // explicit constrctor можно вызвать только так
-	Fraction C{ 12 }; // или так
+	//Fraction C = 12; // explicit constrctor РЅРµРІРѕР·РјРѕР¶РЅРѕ РІС‹Р·РІР°С‚СЊ РѕРїРµСЂР°С†РёРµР№ РїСЂРёСЃРІР°РёРІР°РЅРёСЏ
+	//Fraction C(12); // explicit constrctor РјРѕР¶РЅРѕ РІС‹Р·РІР°С‚СЊ С‚РѕР»СЊРєРѕ С‚Р°Рє
+	Fraction C{ 12 }; // РёР»Рё С‚Р°Рє
 	cout << C << endl;
 #endif // CONVERSION_FROM_OTHER_TO_CLASS
 
