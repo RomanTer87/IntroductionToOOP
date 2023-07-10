@@ -46,6 +46,15 @@ public:
 		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
 		cout << "CopyConstructor:\t" << this << endl;
 	}
+	String(String&& other)
+	{
+		//Shallow copy:
+		this->size = other.size;
+		this->str = other.str;
+		other.size = 0;
+		other.str = 0;
+		cout << "MoveConstructor:\t" << this << endl;
+	}
 	~String()
 	{
 		delete[] str;
@@ -61,6 +70,16 @@ public:
 		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
+	}
+	String& operator=(String&& other)
+	{
+		if (this == &other) return *this;
+		delete[] this->str;
+		this->size = other.size;
+		this->str = other.str;
+		other.size = 0;
+		other.str = nullptr;
+		cout << "MoveAssignment:\t" << this << endl;
 	}
 	char operator[](int i)const
 	{
@@ -87,10 +106,10 @@ String operator+(const String& left, const String& right)
 	String cat(left.get_size() + right.get_size() - 1);
 	for (int i = 0; i < left.get_size(); i++)
 		cat[i] = left[i];
-		//cat.get_str()[i] = left.get_str()[i];
+	//cat.get_str()[i] = left.get_str()[i];
 	for (int i = 0; i < right.get_size(); i++)
 		cat[i + left.get_size() - 1] = right[i];
-		//cat.get_str()[i + left.get_size() - 1] = right.get_str()[i];
+	//cat.get_str()[i + left.get_size() - 1] = right.get_str()[i];
 
 	return cat;
 }
@@ -113,9 +132,10 @@ void main()
 
 	String str2 = "World";
 	cout << str2 << endl;
-
-	String str3 = str1 + " " + str2;
+	cout << "\n-----------------------------------------------------------\n";
+	String str3 = str1 + str2;
 	cout << str3 << endl;
+	cout << "\n-----------------------------------------------------------\n";
 
 	String str4;
 	str4 = str1 + str2;
