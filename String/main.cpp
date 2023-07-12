@@ -22,8 +22,6 @@ public:
 	//	Constructors
 	explicit String(int size = 80) :size(size), str(new char[size]{})
 	{
-		//this->size = size;
-		//this->str = new char[size] {};
 		cout << "DefConstructor:\t" << this << endl;
 	}
 	String(int size, char str)
@@ -32,18 +30,14 @@ public:
 		this->str = new char[size] {};
 		cout << "DefConstructor:\t" << this << endl;
 	}
-	String(const char* str):size(strlen(str)+1), str(new char[size]{})
+	String(const char* str):String(strlen(str)+1)
 	{
-		//this->size = strlen(str) + 1;
-		//this->str = new char[size] {};
 		for (int i = 0; str[i]; i++)this->str[i] = str[i];
 		cout << "Constructor:\t" << this << endl;
 	}
-	String(const String& other):size(other.size), str(new char[size]{})
+	String(const String& other):String(other.str)
 	{
-		//this->size = other.size;
-		//this->str = new char[size] {};
-		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
+		//Deep copy
 		cout << "CopyConstructor:\t" << this << endl;
 	}
 	String(String&& other): size(other.size), str(other.str)
