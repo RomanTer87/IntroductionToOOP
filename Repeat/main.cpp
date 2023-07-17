@@ -1,6 +1,7 @@
 #include<iostream>
 using namespace std;
 
+#define DELIMITER "_________________________________________________________________"
 class Point
 {
 	double x;
@@ -23,7 +24,7 @@ public:
 		this->y = y;
 	}
 	//			Constructors:
-	Point()
+	/*Point()
 	{
 		cout << "Constructor:\t\t" << this << endl;
 	}
@@ -32,15 +33,34 @@ public:
 		this->x = x;
 		this->y = 0;
 		cout << "1ArgConstructor:\t" << this << endl;
+	}*/
+	Point(double x=0, double y=0)  //универсальный конструктор, который может работать как с параметрами так и без них(так как в инициализации предусмотрены параметры по умолчанию.
+	{
+		this->x = x;
+		this->y = y;
+		cout << "Constructor:\t\t" << this << endl;
+	}
+	Point(const Point& other)
+	{
+		this->x = other.x;
+		this->y = other.y;
+		cout << "CopyConstructor:\t" << this << endl;
 	}
 	~Point()
 	{
 		cout << "Destructor:\t\t" << this << endl;
 	}
-
+	//		 Operators:
+	Point& operator=(const Point& other)
+	{
+		this->x = other.x;
+		this->y = other.y;
+		cout << "CopyAssignment:\t" << this << endl;
+		return *this;
+	}
 
 	//			Methods:
-	double distance(Point other)
+	double distance(const Point& other)
 	{
 		double x_distance = this->x - other.x;
 		double y_distance = this->y - other.y;
@@ -57,6 +77,7 @@ double distance(const Point& A, const Point& B)
 	return sqrt(pow(A.get_x() - B.get_x(), 2) + pow(A.get_y() - B.get_y(), 2));
 }
 //#define DISTANCE_CHECK
+//#define CONSTRUCTORS_CHECK 
 
 void main()
 {
@@ -78,12 +99,28 @@ void main()
 	cout << "–ассто€ние между точками A и B:\t" << distance(A, B) << endl;
 	cout << "----------------------------------------------" << endl;
 	cout << "–ассто€ние от точки ј до точки ¬:\t" << A.distance(B) << endl;
+	cout << "----------------------------------------------" << endl;
 	cout << "–ассто€ние от точки B до точки A:\t" << B.distance(A) << endl;
+	cout << "----------------------------------------------" << endl;
 #endif // DISTANCE_CHECK
 
+#ifdef CONSTRUCTORS_CHECK
 	Point A;
 	A.print();
 
 	Point B = 5;
 	B.print();
-} 
+
+	Point C(2, 3);
+	C.print();
+
+	Point D = C;
+	D.print();
+
+	Point E;
+	E = C;
+	E.print();
+#endif // CONSTRUCTORS_CHECK
+
+
+}
