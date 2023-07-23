@@ -13,180 +13,213 @@ class Fraction
 	int numerator;
 	int denominator;
 public:
-	int get_integer(void)const
-	{
-		return integer;
-	}
-	int get_numerator(void)const
-	{
-		return numerator;
-	}
-	int get_denominator(void)const
-	{
-		return denominator;
-	}
-	void set_integer(int integer)
-	{
-		this->integer = integer;
-	}
-	void set_numerator(int numerator)
-	{
-		this->numerator = numerator;
-	}
-	void set_denominator(int denominator)
-	{
-		if (denominator == 0)denominator = 1;
-		this->denominator = denominator;
-	}
-	//				Constructors
-	Fraction()
-	{
-		this->integer = 0;
-		this->numerator = 0;
-		this->denominator = 1;
-		cout << "DefaultConstructor:" << this << endl;
-	}
-	explicit Fraction(int integer)
-	{
-		this->integer = integer;
-		this->numerator = 0;
-		this->denominator = 1;
-		cout << "1ArgConstructor:" << this << endl;
-	}
-	Fraction(double decimal)
-	{
-		decimal += 1e-10;
-		integer = decimal;
-		decimal -= integer;
-		denominator = 1e+9; // точность всегда будет 9 знаков после запятой
-		numerator = decimal * denominator;
-		reduce();
-		cout << "1ArgConstructor:\t" << this << endl;
-	}
-	Fraction(int numerator, int denominator)
-	{
-		this->integer = 0;
-		this->numerator = numerator;
-		set_denominator(denominator);
-		cout << "Constructor:\t" << this << endl;
-	}
-	Fraction(int integer, int numerator, int denominator)
-	{
-		this->integer = integer;
-		this->numerator = numerator;
-		set_denominator(denominator);
-		cout << "Constructr:\t" << this << endl;
-	}
-	~Fraction()
-	{
-		cout << "Destructor:\t" << this << endl;
-	}
+	int get_integer(void)const;
+	int get_numerator(void)const;
+	int get_denominator(void)const;
+	void set_integer(int integer);
+	void set_numerator(int numerator);
+	void set_denominator(int denominator);
 
-	Fraction(const Fraction& other)
-	{
-		this->integer = other.integer;
-		this->numerator = other.numerator;
-		this->denominator = other.denominator;
-		cout << "CopyConstructor:\t" << this << endl;
-	}
+	Fraction();
+	explicit Fraction(int integer);
+	Fraction(double decimal);
+	Fraction(int numerator, int denominator);
+	Fraction(int integer, int numerator, int denominator);
+	~Fraction();
 
-	//		Operators:
-	Fraction& operator=(const Fraction& other)
-	{
-		this->integer = other.integer;
-		this->numerator = other.numerator;
-		this->denominator = other.denominator;
-		cout << "CopyAssignment:\t" << this << endl;
-		return *this;
-	}
-	Fraction& operator*=(const Fraction& other)
-	{
-		return *this = *this * other;
-	}
-	Fraction& operator--()
-	{
-		integer--;
-		return *this;
-	}
-	Fraction operator--(int)
-	{
-		Fraction old(*this);
-		integer--;
-		return old;
-	}
-	Fraction& operator++()
-	{
-		integer++;
-		return *this;
-	}
-	Fraction operator++(int)
-	{
-		Fraction old(*this);
-		integer++;
-		return old;
-	}
+	Fraction(const Fraction& other);
+
+	Fraction& operator=(const Fraction& other);
+	Fraction& operator*=(const Fraction& other);
+	Fraction& operator--();
+	Fraction operator--(int);
+	Fraction& operator++();
+	Fraction operator++(int);
 	//		Type-cast operators
-	explicit operator int()const
-	{
-		return integer;
-	}
-	explicit operator double()const
-	{
-		return integer+(double)numerator / denominator;
-	}
+	explicit operator int()const;
+	explicit operator double()const;
 
 	//		Methods
-	void to_improper()
-	{
-		numerator += integer * denominator;
-		integer = 0;
-	}
-	void to_proper()
-	{
-		integer += numerator / denominator;
-		numerator %= denominator;
-	}
-	Fraction& reduce()
-	{
-		/*int more, less, rest;
-		if (numerator > denominator)more = numerator, less = denominator;
-		else less = numerator, more = denominator;*/
-		to_proper();
-		int less = numerator;
-		int more = denominator;
-		int rest;
-		if (less == 0)return *this;
-		do
-		{
-			rest = more % less;
-			more = less;
-			less = rest;
-		} while (rest);
-		int GCD = more; // GCD - Greatest Common Divisor (наибольший общий делитель)
-		numerator /= GCD;
-		denominator /= GCD;
-		return *this;
-	}
-	void print()const
-	{
-		if (integer)cout << integer; // если есть целая часть, выводим её на экран
-		if (numerator)
-		{
-			if (integer)cout << "(";
-			cout << numerator << "/" << denominator;
-			if (integer)cout << ")";
-		}
-		else if (integer == 0)cout << 0;
-		cout << endl;
-	}
-	Fraction inverted()const
-	{
-		Fraction inverted = *this;
-		inverted.to_improper();
-		std::swap(inverted.numerator, inverted.denominator);
-		return inverted;
-	}
+	void to_improper();
+	void to_proper();
+	Fraction& reduce();
+	void print()const;
+	Fraction inverted()const;
 };
+
+int Fraction:: get_integer(void)const
+{
+	return integer;
+}
+int Fraction:: get_numerator(void)const
+{
+	return numerator;
+}
+int Fraction:: get_denominator(void)const
+{
+	return denominator;
+}
+void Fraction:: set_integer(int integer)
+{
+	this->integer = integer;
+}
+void Fraction:: set_numerator(int numerator)
+{
+	this->numerator = numerator;
+}
+void Fraction:: set_denominator(int denominator)
+{
+	if (denominator == 0)denominator = 1;
+	this->denominator = denominator;
+}
+//				Constructors
+Fraction:: Fraction()
+{
+	this->integer = 0;
+	this->numerator = 0;
+	this->denominator = 1;
+	cout << "DefaultConstructor:" << this << endl;
+}
+Fraction:: Fraction(int integer)
+{
+	this->integer = integer;
+	this->numerator = 0;
+	this->denominator = 1;
+	cout << "1ArgConstructor:" << this << endl;
+}
+Fraction:: Fraction(double decimal)
+{
+	decimal += 1e-10;
+	integer = decimal;
+	decimal -= integer;
+	denominator = 1e+9; // точность всегда будет 9 знаков после запятой
+	numerator = decimal * denominator;
+	reduce();
+	cout << "1ArgConstructor:\t" << this << endl;
+}
+Fraction:: Fraction(int numerator, int denominator)
+{
+	this->integer = 0;
+	this->numerator = numerator;
+	set_denominator(denominator);
+	cout << "Constructor:\t" << this << endl;
+}
+Fraction:: Fraction(int integer, int numerator, int denominator)
+{
+	this->integer = integer;
+	this->numerator = numerator;
+	set_denominator(denominator);
+	cout << "Constructr:\t" << this << endl;
+}
+Fraction::~Fraction()
+{
+	cout << "Destructor:\t" << this << endl;
+}
+
+Fraction:: Fraction(const Fraction& other)
+{
+	this->integer = other.integer;
+	this->numerator = other.numerator;
+	this->denominator = other.denominator;
+	cout << "CopyConstructor:\t" << this << endl;
+}
+
+//		Operators:
+Fraction& Fraction:: operator=(const Fraction& other)
+{
+	this->integer = other.integer;
+	this->numerator = other.numerator;
+	this->denominator = other.denominator;
+	cout << "CopyAssignment:\t" << this << endl;
+	return *this;
+}
+Fraction& Fraction::operator*=(const Fraction & other)
+{
+	return *this = *this * other;
+}
+Fraction& Fraction:: operator--()
+{
+	integer--;
+	return *this;
+}
+Fraction Fraction:: operator--(int)
+{
+	Fraction old(*this);
+	integer--;
+	return old;
+}
+Fraction& Fraction::operator++()
+{
+	integer++;
+	return *this;
+}
+Fraction Fraction:: operator++(int)
+{
+	Fraction old(*this);
+	integer++;
+	return old;
+}
+//		Type-cast operators
+Fraction:: operator int()const
+{
+	return integer;
+}
+Fraction:: operator double()const
+{
+	return integer + (double)numerator / denominator;
+}
+
+//		Methods
+void Fraction:: to_improper()
+{
+	numerator += integer * denominator;
+	integer = 0;
+}
+void Fraction::to_proper()
+{
+	integer += numerator / denominator;
+	numerator %= denominator;
+}
+Fraction& Fraction:: reduce()
+{
+	/*int more, less, rest;
+	if (numerator > denominator)more = numerator, less = denominator;
+	else less = numerator, more = denominator;*/
+	to_proper();
+	int less = numerator;
+	int more = denominator;
+	int rest;
+	if (less == 0)return *this;
+	do
+	{
+		rest = more % less;
+		more = less;
+		less = rest;
+	} while (rest);
+	int GCD = more; // GCD - Greatest Common Divisor (наибольший общий делитель)
+	numerator /= GCD;
+	denominator /= GCD;
+	return *this;
+}
+void Fraction:: print()const
+{
+	if (integer)cout << integer; // если есть целая часть, выводим её на экран
+	if (numerator)
+	{
+		if (integer)cout << "(";
+		cout << numerator << "/" << denominator;
+		if (integer)cout << ")";
+	}
+	else if (integer == 0)cout << 0;
+	cout << endl;
+}
+Fraction Fraction:: inverted()const
+{
+	Fraction inverted = *this;
+	inverted.to_improper();
+	std::swap(inverted.numerator, inverted.denominator);
+	return inverted;
+}
 
 Fraction operator+(Fraction left, Fraction right)
 {
@@ -338,7 +371,7 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 //#define INPUT_CHECK_1
 //#define INPUT_CHECK_2
 //#define	CONVERSION_FROM_OTHER_TO_CLASS
-//#define CONVERSION_FROM_CLASS_TO_OTHER
+#define CONVERSION_FROM_CLASS_TO_OTHER
 
 
 void main()
@@ -449,6 +482,6 @@ void main()
 	cout << b << endl;
 #endif // CONVERSION_FROM_CLASS_TO_OTHER
 
-	Fraction A = 2.76;
-	cout << A << endl;
+	//Fraction A = 2.76;
+	//cout << A << endl;
 }
