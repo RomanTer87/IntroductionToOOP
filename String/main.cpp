@@ -1,6 +1,6 @@
 ﻿#include<iostream>
 using namespace std;
-#include"String.h"
+#include"MyString.h"
 
 #define BASE_CHECK
 #define CALING_CONSTRUCTORS
